@@ -12,7 +12,7 @@ Vue.use(VueRouter)
     component: Home
   },
   {
-    path: '/editor',
+    path: '/editor/:id',
     name: 'Editor',
     component: Editor
   },

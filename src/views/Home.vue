@@ -2,8 +2,7 @@
   <el-main>
     <el-table
       :data = "files"
-      border
-      style="width: 100%">
+      border>
       <el-table-column
         prop="name"
         label="name"
@@ -15,11 +14,10 @@
       </el-table-column>
       <el-table-column
         fixed="right"
-        label="操作"
+        label="operate"
         width="100">
         <template slot-scope="scope">
-          <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
-          <el-button type="text" size="small">编辑</el-button>
+          <el-button @click="handleClick(scope.row)" type="text" size="small">EDIT</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -66,8 +64,8 @@ export default {
     },
     handleClick(row) {
       console.log(row)
-      const {href} = row
-      this.$router.push({ name: 'Editor', params: { href }})
+      const {id} = row
+      this.$router.push({ name: 'Editor', params: { id }})
     }
   },
   data() {
