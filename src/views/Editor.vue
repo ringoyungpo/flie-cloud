@@ -17,6 +17,8 @@
 
 <script>
 import { createClient } from "hal-rest-client";
+import SockJS from  'sockjs-client';  
+import  Stomp from 'stompjs';
 
 const client = createClient("/api");
 
@@ -27,7 +29,8 @@ export default {
       fileForm: {
         props:{
           name: '',
-          content: ''
+          content: '',
+          stompClient: undefined
         }
       }
     }
@@ -47,6 +50,15 @@ export default {
     this.fileForm = {name, content}
     this.fileResource = fileResource
     console.log({fileResource})
+    let {stompClient} = this
+    stompClient = Stomp.over(new SockJS('/api/chat')); 
+    stompClient.connect({}, frame => {
+        console.log('Connected: ' + frame);
+        stompClient.subscribe('/topic/messages', messageOutput => {
+          console.log({messageOutput})
+        })
+        stompClient.send("/app/chat", {}, JSON.stringify({'from':'fromasdasd', 'text':'textassad'}))
+    })
   }
 }
 </script>

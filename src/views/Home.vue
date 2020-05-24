@@ -45,10 +45,10 @@ export default {
   components: {
   },
   async mounted() {
-    // let count = 23;
-    // do {
-    //   await client.create("/files", { id: null, name: "Thomas", content: "jkdsjjssdksdfsfd" });
-    // } while(--count > 0)
+    let count = 11;
+    do {
+      await client.create("/files", { id: null, name: "Thomas", content: "jkdsjjssdksdfsfd" });
+    } while(--count > 0)
     await this.search()
   },
   methods: {
