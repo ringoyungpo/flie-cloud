@@ -2,20 +2,20 @@ package io.github.ringoyungpo.filecloud;
 
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.stereotype.Controller;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Controller
 public class SocketController {
 
-    @MessageMapping("/chat")
-    @SendTo("/topic/messages")
-    public OutputMessage send(Message msg) throws Exception {
-        return new OutputMessage(
-                msg.getFrom(),
-                msg.getText(),
-                new SimpleDateFormat("HH:mm").format(new Date()));
+    private static ConcurrentHashMap<Long, FileStatus> fileStatusMatrix;
+
+    @MessageMapping("/editing")
+    @SendTo("/topic/editing_status")
+    public OutputMessage send(Message msg, SimpMessageHeaderAccessor headerAccessor) throws Exception {
+        String sessionId = headerAccessor.getSessionId();
+        return OutputMessage.builder().uuid(sessionId).build();
     }
 }

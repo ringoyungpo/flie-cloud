@@ -5,11 +5,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Queue;
+
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Message {
+public class FileStatus {
 
-    private String uuid;
+    private String editingUser;
+
+    private Queue<String> waittingUser;
 }
