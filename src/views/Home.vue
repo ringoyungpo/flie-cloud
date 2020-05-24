@@ -45,11 +45,11 @@ export default {
   components: {
   },
   async mounted() {
+    await this.search()
     let count = 11;
     do {
       await client.create("/files", { id: null, name: "Thomas", content: "jkdsjjssdksdfsfd" });
     } while(--count > 0)
-    await this.search()
   },
   methods: {
     async search(){

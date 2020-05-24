@@ -1,6 +1,7 @@
 <template>
   <el-container>
     <el-main>
+      <flip-down :endDate="endDate" :type="1" @timeUp="timeUp" />
       <el-form ref="fileResourceForm" :model="fileForm" label-width="80px">
         <el-form-item label="name">
           <el-input v-model="fileForm.name"></el-input>
@@ -19,10 +20,14 @@
 import { createClient } from "hal-rest-client";
 import SockJS from  'sockjs-client';  
 import  Stomp from 'stompjs';
+import FlipDown from 'vue-flip-down'
 
 const client = createClient("/api");
 
 export default {
+  components: {
+    FlipDown
+  },
   data() {
     return {
       fileResource: undefined,
@@ -30,7 +35,8 @@ export default {
         props:{
           name: '',
           content: '',
-          stompClient: undefined
+          stompClient: undefined,
+          endDate: 0
         }
       }
     }
@@ -41,7 +47,9 @@ export default {
       this.fileResource.prop('name', name)
       this.fileResource.prop('content', content)
       await this.fileResource.update()
-
+    },
+    timeUp(){
+      console.log('time up')
     }
   },
   async mounted(){
@@ -59,6 +67,7 @@ export default {
         })
         stompClient.send("/app/chat", {}, JSON.stringify({'from':'fromasdasd', 'text':'textassad'}))
     })
+    this.endDate = new Date().getTime() + 60 * 1000
   }
 }
 </script>
