@@ -59,13 +59,13 @@ export default {
     this.fileResource = fileResource
     console.log({fileResource})
     let {stompClient} = this
-    stompClient = Stomp.over(new SockJS('/api/chat')); 
+    stompClient = Stomp.over(new SockJS('/api/editing_center')); 
     stompClient.connect({}, frame => {
         console.log('Connected: ' + frame);
-        stompClient.subscribe('/topic/messages', messageOutput => {
+        stompClient.subscribe('/topic/editing_status', messageOutput => {
           console.log({messageOutput})
         })
-        stompClient.send("/app/chat", {}, JSON.stringify({'from':'fromasdasd', 'text':'textassad'}))
+        stompClient.send("/ui/editing", {}, JSON.stringify({'fileId':'1', type: 'APPLY_FOR_EDITING'}))
     })
     this.endDate = new Date().getTime() + 60 * 1000
   }
