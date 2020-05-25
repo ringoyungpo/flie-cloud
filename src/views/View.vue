@@ -7,6 +7,9 @@
         prop="name"
         label="name"
         width="120">
+        <template slot-scope="scope">
+          <el-button @click="download(scope.row)" type="text" size="small">{{scope.row.name}}</el-button>
+        </template>
       </el-table-column>
       <el-table-column
         prop="content"
@@ -39,6 +42,7 @@ import { createClient } from "hal-rest-client";
 import { stringify } from "qs"
 
 const client = createClient("/");
+import { saveAs } from 'file-saver'
 
 export default {
   name: 'View',
@@ -59,9 +63,13 @@ export default {
       }
     },
     handleClick(row) {
-      console.log(row)
       const {id} = row
       this.$router.push({ name: 'Editor', params: { id }})
+    },
+    download(row){
+      const {name, content} = row
+      const blob = new Blob([content], {type: "text/plain;charset=utf-8"});
+      saveAs(blob, `${name}.txt`)
     }
   },
   data() {

@@ -17,6 +17,7 @@
 
 <script>
 import { createClient } from "hal-rest-client";
+import { saveAs } from 'file-saver'
 
 const client = createClient("/");
 
@@ -41,6 +42,8 @@ export default {
       await this.$refs['fileForm'].validate(async(valid) => {
         if (valid) {
           const {name, content} = this.fileForm
+          const blob = new Blob([content], {type: "text/plain;charset=utf-8"});
+          saveAs(blob, `${name}.txt`)
           await client.create("/files", { name , content });
           this.$message({
             message: 'Success',
