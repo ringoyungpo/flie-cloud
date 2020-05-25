@@ -32,7 +32,7 @@ export default {
     return {
       rules: {
         name: [{ required: true, message: 'Please Enter a Valid Name', trigger: 'change' }],
-        content: [{ required: true, message: 'Please Enter a Valid Name', trigger: 'change' }]
+        content: [{ required: true, message: 'Please Enter a Valid Content', trigger: 'change' }]
       },
       fileResource: undefined,
       fileForm: {
