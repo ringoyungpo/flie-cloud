@@ -10,7 +10,7 @@
           <el-input type="textarea" v-model="fileForm.content" :disabled="!available">
           </el-input>
         </el-form-item>
-        <el-button type="primary" @click="onSubmit" :disabled="!available">Save</el-button>
+        <el-button type="primary" @click="onSave" :disabled="!available">Save</el-button>
       </el-form>
     </el-main>
   </el-container>
@@ -44,7 +44,7 @@ export default {
     }
   },
   methods: {
-    async onSubmit() {
+    async onSave() {
       const {name, content} = this.fileForm
       this.fileResource.prop('name', name)
       this.fileResource.prop('content', content)

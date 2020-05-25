@@ -41,15 +41,11 @@ import { stringify } from "qs"
 const client = createClient("/api");
 
 export default {
-  name: 'Home',
+  name: 'View',
   components: {
   },
   async mounted() {
     await this.search()
-    let count = 11;
-    do {
-      await client.create("/files", { id: null, name: "Thomas", content: "jkdsjjssdksdfsfd" });
-    } while(--count > 0)
   },
   methods: {
     async search(){
