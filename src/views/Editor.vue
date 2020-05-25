@@ -2,11 +2,11 @@
   <el-container>
     <el-main>
       <flip-down :endDate="endDate" :type="1" @timeUp="timeUp" />
-      <el-form ref="fileResourceForm" :model="fileForm" label-width="80px">
-        <el-form-item label="name">
+      <el-form ref="fileForm" :rules="rules" :model="fileForm" label-width="80px">
+        <el-form-item label="name" prop="name">
           <el-input v-model="fileForm.name" :disabled="!available"></el-input>
         </el-form-item>
-        <el-form-item label="content">
+        <el-form-item label="content" prop="content">
           <el-input type="textarea" v-model="fileForm.content" :disabled="!available">
           </el-input>
         </el-form-item>
@@ -30,6 +30,10 @@ export default {
   },
   data() {
     return {
+      rules: {
+        name: [{ required: true, message: 'Please Enter a Valid Name', trigger: 'change' }],
+        content: [{ required: true, message: 'Please Enter a Valid Name', trigger: 'change' }]
+      },
       fileResource: undefined,
       fileForm: {
         props:{
@@ -45,10 +49,20 @@ export default {
   },
   methods: {
     async onSave() {
-      const {name, content} = this.fileForm
-      this.fileResource.prop('name', name)
-      this.fileResource.prop('content', content)
-      await this.fileResource.update()
+      await this.$refs['fileForm'].validate(async(valid) => {
+        if (valid) {
+          const {name, content} = this.fileForm
+          this.fileResource.prop('name', name)
+          this.fileResource.prop('content', content)
+          await this.fileResource.update()
+          this.$message({
+            message: 'Success',
+            type: 'success'
+          })
+        } else {
+          return false;
+        }
+      })
     },
     timeUp(){
       this.stompClient.disconnect()
