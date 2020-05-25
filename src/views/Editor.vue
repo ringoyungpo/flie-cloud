@@ -34,12 +34,13 @@ export default {
       fileForm: {
         props:{
           name: '',
-          content: '',
-          stompClient: undefined,
-          endDate: 0
+          content: ''
         }
       },
-      available: false
+      endDate: 0,
+      stompClient: undefined,
+      available: false,
+      id: undefined
     }
   },
   methods: {
@@ -50,26 +51,29 @@ export default {
       await this.fileResource.update()
     },
     timeUp(){
-      console.log('time up')
+      if(this.available){
+        this.stompClient.send("/ui/edit_action", {}, JSON.stringify({'fileId': this.id, type: 'TIME_UP'}))
+      }
     }
   },
   async mounted(){
-    const {id} = this.$route.params
+    this.id = this.$route.params.id
     const fileResource = await client.fetchResource(`/files/${this.$route.params.id}`);
     const {name, content} = fileResource.props
     this.fileForm = {name, content}
     this.fileResource = fileResource
     this.stompClient = Stomp.over(new SockJS('/api/editing_center')); 
     this.stompClient.connect({}, () => {
-        this.stompClient.subscribe('/topic/editing_box', editReplayFram => {
+        this.stompClient.subscribe('/user/topic/editing_box', editReplayFram => {
           const editReplay = JSON.parse(editReplayFram.body)
-          if(editReplay.type === 'AVAILABLE'){
-            this.available = true
-          }
+          this.available = editReplay.available
+          this.endDate = new Date().getTime() + 60 * 1000
         })
-        this.stompClient.send("/ui/edit_action", {}, JSON.stringify({'fileId': id, type: 'APPLY_FOR_EDITING'}))
+        this.stompClient.subscribe('/user/topic/file_status', msg => {
+          console.log({msg})
+        })
+        this.stompClient.send("/ui/edit_action", {}, JSON.stringify({'fileId': this.id, type: 'APPLY_FOR_EDITING'}))
     })
-    this.endDate = new Date().getTime() + 60 * 1000
   }
 }
 </script>
