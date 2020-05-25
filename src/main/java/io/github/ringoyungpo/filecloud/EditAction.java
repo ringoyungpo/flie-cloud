@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class EditAction {
 
-    private long fileId;
+    private Long fileId;
 
     private EditActionEnum type;
 }

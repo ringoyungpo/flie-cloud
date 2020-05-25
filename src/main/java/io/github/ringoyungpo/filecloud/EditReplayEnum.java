@@ -1,5 +1,5 @@
 package io.github.ringoyungpo.filecloud;
 
 public enum EditReplayEnum {
-    AVAILABLE, EDITING
+    AVAILABLE, EDITING, TIME_UP
 }

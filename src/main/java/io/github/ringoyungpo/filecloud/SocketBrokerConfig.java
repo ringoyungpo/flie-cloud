@@ -19,6 +19,11 @@ public class SocketBrokerConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/editing_center")
-                .setAllowedOrigins("http://localhost:3000").withSockJS();
+                .setAllowedOrigins("http://localhost:3000")
+                .setHandshakeHandler(new HandshakeHandler());
+
+        registry.addEndpoint("/editing_center")
+                .setAllowedOrigins("http://localhost:3000")
+                .setHandshakeHandler(new HandshakeHandler()).withSockJS();
     }
 }

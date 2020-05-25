@@ -13,5 +13,7 @@ public class EditReplay {
 
     private String uuid;
 
-    private EditReplayEnum type;
+    private Boolean available;
+
+    private Long timeLeft;
 }
