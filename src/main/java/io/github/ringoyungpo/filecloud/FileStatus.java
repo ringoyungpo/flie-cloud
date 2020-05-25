@@ -15,5 +15,5 @@ public class FileStatus {
 
     private String editingUser;
 
-    private Queue<String> waittingUser;
+    private Queue<String> waittingUsers;
 }

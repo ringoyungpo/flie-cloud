@@ -9,7 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Message {
+public class EditReplay {
 
     private String uuid;
+
+    private EditReplayEnum type;
 }

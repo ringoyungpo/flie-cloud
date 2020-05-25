@@ -9,6 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class OutputMessage {
-    private String uuid;
+public class EditAction {
+
+    private long fileId;
+
+    private EditActionEnum type;
 }
