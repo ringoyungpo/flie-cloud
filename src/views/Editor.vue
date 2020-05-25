@@ -4,13 +4,13 @@
       <flip-down :endDate="endDate" :type="1" @timeUp="timeUp" />
       <el-form ref="fileResourceForm" :model="fileForm" label-width="80px">
         <el-form-item label="name">
-          <el-input v-model="fileForm.name"></el-input>
+          <el-input v-model="fileForm.name" :disabled="!available"></el-input>
         </el-form-item>
         <el-form-item label="content">
-          <el-input type="textarea" v-model="fileForm.content">
+          <el-input type="textarea" v-model="fileForm.content" :disabled="!available">
           </el-input>
         </el-form-item>
-        <el-button type="primary" @click="onSubmit">submit</el-button>
+        <el-button type="primary" @click="onSubmit" :disabled="!available">Save</el-button>
       </el-form>
     </el-main>
   </el-container>
@@ -38,7 +38,8 @@ export default {
           stompClient: undefined,
           endDate: 0
         }
-      }
+      },
+      available: false
     }
   },
   methods: {
@@ -53,19 +54,20 @@ export default {
     }
   },
   async mounted(){
+    const {id} = this.$route.params
     const fileResource = await client.fetchResource(`/files/${this.$route.params.id}`);
     const {name, content} = fileResource.props
     this.fileForm = {name, content}
     this.fileResource = fileResource
-    console.log({fileResource})
-    let {stompClient} = this
-    stompClient = Stomp.over(new SockJS('/api/editing_center')); 
-    stompClient.connect({}, frame => {
-        console.log('Connected: ' + frame);
-        stompClient.subscribe('/topic/editing_status', messageOutput => {
-          console.log({messageOutput})
+    this.stompClient = Stomp.over(new SockJS('/api/editing_center')); 
+    this.stompClient.connect({}, () => {
+        this.stompClient.subscribe('/topic/editing_box', editReplayFram => {
+          const editReplay = JSON.parse(editReplayFram.body)
+          if(editReplay.type === 'AVAILABLE'){
+            this.available = true
+          }
         })
-        stompClient.send("/ui/editing", {}, JSON.stringify({'fileId':'1', type: 'APPLY_FOR_EDITING'}))
+        this.stompClient.send("/ui/edit_action", {}, JSON.stringify({'fileId': id, type: 'APPLY_FOR_EDITING'}))
     })
     this.endDate = new Date().getTime() + 60 * 1000
   }
