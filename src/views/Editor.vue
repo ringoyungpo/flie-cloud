@@ -51,9 +51,23 @@ export default {
       await this.fileResource.update()
     },
     timeUp(){
-      if(this.available){
-        this.stompClient.send("/ui/edit_action", {}, JSON.stringify({'fileId': this.id, type: 'TIME_UP'}))
-      }
+      this.stompClient.disconnect()
+      this.connectWebsocket()
+    },
+    connectWebsocket(){
+      this.stompClient = Stomp.over(new SockJS('/api/editing_center')); 
+      this.stompClient.connect({}, () => {
+        this.stompClient.subscribe(`/user/topic/editing_box`, editReplayFram => {
+          const editReplay = JSON.parse(editReplayFram.body)
+          const {available} = editReplay
+          if(available){
+            this.endDate = new Date().getTime() + 60 * 1000
+          }
+          this.available = available
+
+        })
+        this.stompClient.send(`/ui/edit_action/${this.id}`, {}, JSON.stringify({'fileId': this.id, type: 'APPLY_FOR_EDITING'}))
+      })
     }
   },
   async mounted(){
@@ -62,18 +76,10 @@ export default {
     const {name, content} = fileResource.props
     this.fileForm = {name, content}
     this.fileResource = fileResource
-    this.stompClient = Stomp.over(new SockJS('/api/editing_center')); 
-    this.stompClient.connect({}, () => {
-        this.stompClient.subscribe('/user/topic/editing_box', editReplayFram => {
-          const editReplay = JSON.parse(editReplayFram.body)
-          this.available = editReplay.available
-          this.endDate = new Date().getTime() + 60 * 1000
-        })
-        this.stompClient.subscribe('/user/topic/file_status', msg => {
-          console.log({msg})
-        })
-        this.stompClient.send("/ui/edit_action", {}, JSON.stringify({'fileId': this.id, type: 'APPLY_FOR_EDITING'}))
-    })
-  }
+    this.connectWebsocket()
+  },
+  beforeDestroy(){
+    this.stompClient.disconnect()
+  },
 }
 </script>
