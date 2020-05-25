@@ -62,7 +62,11 @@ export default {
           const {available} = editReplay
           if(available){
             this.endDate = new Date().getTime() + 60 * 1000
+            if(!this.available){
+              this.$message('You have one minute lease file locking for editing');
+            }
           }
+          
           this.available = available
 
         })
