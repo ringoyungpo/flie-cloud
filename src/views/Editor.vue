@@ -22,7 +22,7 @@ import SockJS from  'sockjs-client';
 import  Stomp from 'stompjs';
 import FlipDown from 'vue-flip-down'
 
-const client = createClient("/api");
+const client = createClient("/");
 
 export default {
   components: {
@@ -69,7 +69,7 @@ export default {
       this.connectWebsocket()
     },
     connectWebsocket(){
-      this.stompClient = Stomp.over(new SockJS('/api/editing_center')); 
+      this.stompClient = Stomp.over(new SockJS('/editing_center'));
       this.stompClient.connect({}, () => {
         this.stompClient.subscribe(`/user/topic/editing_box`, editReplayFram => {
           const editReplay = JSON.parse(editReplayFram.body)

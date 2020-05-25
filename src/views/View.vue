@@ -38,7 +38,7 @@
 import { createClient } from "hal-rest-client";
 import { stringify } from "qs"
 
-const client = createClient("/api");
+const client = createClient("/");
 
 export default {
   name: 'View',

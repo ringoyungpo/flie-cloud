@@ -18,7 +18,7 @@
 <script>
 import { createClient } from "hal-rest-client";
 
-const client = createClient("/api");
+const client = createClient("/");
 
 export default {
   data() {
