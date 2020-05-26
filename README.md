@@ -26,7 +26,7 @@ npm run serve
 another terminal for java
 ```
 ./gradlew bootRun(unix-like)
-.\gradlew.bat bootRun(windows)
+.\gradlew.bat bootRun(windows powershell)
 ```
 
 ### Compiles and minifies for production
@@ -37,6 +37,6 @@ static resources located at src/main/resources/static
 
 ```
 ./gradlew bootJar(unix-like)
-./gradlew.bat bootJar(windows)
+.\gradlew.bat bootJar(windows powershell)
 ```
 .jar file located at build/libs
